@@ -82,13 +82,13 @@ def main():
 
     for epoch in range(args.start_epoch, args.epochs):
 
-        train_loss, train_prec1, train_prec5, lr = train(train_loader, model, criterion, optimizer, epoch)
+        train_loss, train_prec1, lr = train(train_loader, model, criterion, optimizer, epoch)
 
-        val_loss, val_prec1, val_prec5 = validate(val_loader, model, criterion)
+        val_loss, val_prec1 = validate(val_loader, model, criterion)
 
-        scores.append(('{}\t{:.3f}' + '\t{:.4f}' * 6)
+        scores.append(('{}\t{:.3f}' + '\t{:.4f}' * 4)
                       .format(epoch, lr, train_loss, val_loss,
-                              train_prec1, val_prec1, train_prec5, val_prec5))
+                              train_prec1, val_prec1 ))
 
         is_best = val_prec1 > best_prec1
         if is_best:
@@ -126,10 +126,9 @@ def train(train_loader, model, criterion, optimizer, epoch):
     batch_time = AverageMeter()
     data_time = AverageMeter()
     losses = AverageMeter()
-    top1, top5 = [], []
+    top1 = []
     for i in range(args.num_exits):
         top1.append(AverageMeter())
-        top5.append(AverageMeter())
 
     # switch to train mode
     model.train()
@@ -161,9 +160,8 @@ def train(train_loader, model, criterion, optimizer, epoch):
         losses.update(loss.item(), input.size(0))
 
         for j in range(len(output)):
-            prec1, prec5 = accuracy(output[j].data, target, topk=(1, 5))
+            prec1 = accuracy(output[j].data, target, topk=(1,))
             top1[j].update(prec1.item(), input.size(0))
-            top5[j].update(prec5.item(), input.size(0))
 
         # compute gradient and do SGD step
         optimizer.zero_grad()
@@ -179,11 +177,10 @@ def train(train_loader, model, criterion, optimizer, epoch):
                   'Time {batch_time.avg:.3f}\t'
                   'Data {data_time.avg:.3f}\t'
                   'Loss {loss.val:.4f}\t'
-                  'Acc@1 {top1.val:.4f}\t'
-                  'Acc@5 {top5.val:.4f}'.format(
+                  'Acc@1 {top1.val:.4f}'.format(
                     epoch, i + 1, len(train_loader),
                     batch_time=batch_time, data_time=data_time,
-                    loss=losses, top1=top1[-1], top5=top5[-1]))
+                    loss=losses, top1=top1[-1]))
 
     return losses.avg, top1[-1].avg, top5[-1].avg, running_lr
 
@@ -191,10 +188,9 @@ def validate(val_loader, model, criterion):
     batch_time = AverageMeter()
     losses = AverageMeter()
     data_time = AverageMeter()
-    top1, top5 = [], []
+    top1 = []
     for i in range(args.num_exits):
         top1.append(AverageMeter())
-        top5.append(AverageMeter())
 
     model.eval()
 
@@ -220,9 +216,8 @@ def validate(val_loader, model, criterion):
             losses.update(loss.item(), input.size(0))
 
             for j in range(len(output)):
-                prec1, prec5 = accuracy(output[j].data, target, topk=(1, 5))
+                prec1 = accuracy(output[j].data, target, topk=(1,))
                 top1[j].update(prec1.item(), input.size(0))
-                top5[j].update(prec5.item(), input.size(0))
 
             # measure elapsed time
             batch_time.update(time.time() - end)
