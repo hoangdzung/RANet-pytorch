@@ -203,16 +203,16 @@ class RAFirstLayer(nn.Module):
         _grFactor = args.grFactor[::-1] # 1-2-4
         _scale_list = args.scale_list[::-1] # 3-2-1
         self.layers = nn.ModuleList()
-        if args.data.startswith('cifar'):
-            self.layers.append(ConvBasic(nIn, nOut * _grFactor[0],
-                                         kernel=3, stride=1, padding=1))
-        elif args.data == 'ImageNet':
-            conv = nn.Sequential(
-                    nn.Conv2d(nIn, nOut * _grFactor[0], 7, 2, 3),
-                    nn.BatchNorm2d(nOut * _grFactor[0]),
-                    nn.ReLU(inplace=True),
-                    nn.MaxPool2d(3, 2, 1))
-            self.layers.append(conv)
+        # if args.data.startswith('cifar'):
+        #     self.layers.append(ConvBasic(nIn, nOut * _grFactor[0],
+        #                                  kernel=3, stride=1, padding=1))
+        # elif args.data == 'ImageNet':
+        conv = nn.Sequential(
+                nn.Conv2d(nIn, nOut * _grFactor[0], 7, 2, 3),
+                nn.BatchNorm2d(nOut * _grFactor[0]),
+                nn.ReLU(inplace=True),
+                nn.MaxPool2d(3, 2, 1))
+        self.layers.append(conv)
 
         nIn = nOut * _grFactor[0]
         
@@ -294,9 +294,9 @@ class RANet(nn.Module):
                 if n_block_curr > self.nBlocks[ii]:
                     if args.data.startswith('cifar100'):
                         self.classifier.append(
-                        self._build_classifier_cifar(nIn, 100))
+                        self._build_classifier_imagenet(nIn, 100))
                     elif args.data.startswith('cifar10'):
-                        self.classifier.append(self._build_classifier_cifar(nIn, 10))
+                        self.classifier.append(self._build_classifier_imagenet(nIn, 10))
                     elif args.data == 'ImageNet':
                         self.classifier.append(
                         self._build_classifier_imagenet(nIn, 1000))
