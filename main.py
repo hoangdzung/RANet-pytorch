@@ -23,15 +23,15 @@ if args.gpu:
 def main():
 
     global args
-    best_prec1, best_epoch = 0.0, 0
+    best_prec1, best_epoch, patient = 0.0, 0, 0
     
     if not os.path.exists(args.save):
         os.makedirs(args.save)
 
     if args.data.startswith('cifar'):
-        IM_SIZE = 32
-    else:
         IM_SIZE = 224
+    else:
+        IM_SIZE = 96
     
     print(args.arch)    
     model = getattr(models, args.arch)(args)
@@ -95,6 +95,9 @@ def main():
             best_prec1 = val_prec1
             best_epoch = epoch
             print('Best var_prec1 {}'.format(best_prec1))
+            patient = 0
+        elif val_prec1 + 1e-5 < best_prec1:
+            patient += 1
 
         model_filename = 'checkpoint_%03d.pth.tar' % epoch
         save_checkpoint({
@@ -109,6 +112,8 @@ def main():
         if os.path.exists(model_path):
             os.remove(model_path)
 
+        if patient > 5:
+            break
     print('Best val_prec1: {:.4f} at epoch {}'.format(best_prec1, best_epoch))
 
     ### Test the final model
