@@ -38,7 +38,7 @@ def main():
     args.num_exits = len(model.classifier)
     global n_flops
 
-    n_flops, n_params = measure_model(model, IM_SIZE, IM_SIZE)
+    n_flops, n_params = measure_model(model, IM_SIZE, IM_SIZE, args.inChannels)
     
     torch.save(n_flops, os.path.join(args.save, 'flops.pth'))
     del(model)
