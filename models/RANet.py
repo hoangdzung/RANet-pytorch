@@ -300,6 +300,12 @@ class RANet(nn.Module):
                     elif args.data == 'ImageNet':
                         self.classifier.append(
                         self._build_classifier_imagenet(nIn, 1000))
+                    elif args.data == 'octmnist':
+                        self.classifier.append(
+                        self._build_classifier_imagenet(nIn, 4))
+                    elif args.data == 'tissuemnist':
+                        self.classifier.append(
+                        self._build_classifier_imagenet(nIn, 8))
                     else:
                         raise NotImplementedError
                 
