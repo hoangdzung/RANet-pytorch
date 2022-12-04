@@ -14,13 +14,13 @@ def get_dataloaders(args):
                                      transform=transforms.Compose([
                                         # transforms.RandomCrop(32, padding=4),
                                         # transforms.RandomHorizontalFlip(),
-                                        transforms.Resize(224, 224),
+                                        transforms.Resize((224, 224)),
                                         transforms.ToTensor(),
                                         # normalize
                                      ]))
         test_set = datasets.CIFAR10(args.data_root, train=False, download=True,
                                    transform=transforms.Compose([
-                                    transforms.Resize(224, 224),
+                                    transforms.Resize((224, 224)),
                                     transforms.ToTensor(),
                                 #     normalize
                                    ]))
@@ -32,13 +32,13 @@ def get_dataloaders(args):
                                       transform=transforms.Compose([
                                         # transforms.RandomCrop(32, padding=4),
                                         # transforms.RandomHorizontalFlip(),
-                                        transforms.Resize(224, 224),
+                                        transforms.Resize((224, 224)),
                                         transforms.ToTensor(),
                                         # normalize
                                       ]))
         test_set = datasets.CIFAR100(args.data_root, train=False, download=True,
                                     transform=transforms.Compose([
-                                        transforms.Resize(224, 224),
+                                        transforms.Resize((224, 224)),
                                         transforms.ToTensor(),
                                         # normalize
                                     ]))
