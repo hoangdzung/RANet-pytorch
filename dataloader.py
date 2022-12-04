@@ -51,9 +51,9 @@ def get_dataloaders(args):
         else:
             raise NotImplementedError
 
-        train_set = dataclass(root=args.data_root, split='train', download=True, transform=transforms.Compose([transforms.Resize(96, 96), transforms.ToTensor()]))
-        val_set = dataclass(root=args.data_root, split='val', download=True, transform=transforms.Compose([transforms.Resize(96, 96), transforms.ToTensor()]))
-        test_set = dataclass(root=args.data_root, split='test', download=True, transform=transforms.Compose([transforms.Resize(96, 96), transforms.ToTensor()]))
+        train_set = dataclass(root=args.data_root, split='train', download=True, transform=transforms.Compose([transforms.Resize((96, 96)), transforms.ToTensor()]))
+        val_set = dataclass(root=args.data_root, split='val', download=True, transform=transforms.Compose([transforms.Resize((96, 96)), transforms.ToTensor()]))
+        test_set = dataclass(root=args.data_root, split='test', download=True, transform=transforms.Compose([transforms.Resize((96, 96)), transforms.ToTensor()]))
 
     else:
         # ImageNet

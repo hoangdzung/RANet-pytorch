@@ -257,7 +257,7 @@ class RANet(nn.Module):
         # The number of layers in each block
         self.steps = args.step
 
-        self.FirstLayer = RAFirstLayer(3, args.nChannels, args)
+        self.FirstLayer = RAFirstLayer(args.inChannels, args.nChannels, args)
 
         steps = [args.step] 
         for ii in range(self.nScales):

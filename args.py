@@ -47,6 +47,7 @@ arch_group.add_argument('--reduction', default=0.5, type=float,
 # msdnet config
 arch_group.add_argument('--nBlocks', type=int, default=2)
 arch_group.add_argument('--nChannels', type=int, default=16)
+arch_group.add_argument('--inChannels', type=int, default=3)
 arch_group.add_argument('--growthRate', type=int, default=6)
 arch_group.add_argument('--grFactor', default='4-2-1', type=str)
 arch_group.add_argument('--bnFactor', default='4-2-1', type=str)
