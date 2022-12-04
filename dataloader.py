@@ -5,6 +5,22 @@ import torchvision.datasets as datasets
 import medmnist
 from medmnist.dataset import *
 
+class WrapOCTMNIST(OCTMNIST):
+    def __init__(self, **kwargs):
+        super(WrapOCTMNIST, self).__init__(**kwargs)
+
+    def __getitem__(self, idx):
+        image, label = super(WrapOCTMNIST, self).__getitem__(idx)
+        return image, int(label[0])
+
+class WrapTissueMNIST(TissueMNIST):
+    def __init__(self, **kwargs):
+        super(WrapTissueMNIST, self).__init__(**kwargs)
+
+    def __getitem__(self, idx):
+        image, label = super(WrapTissueMNIST, self).__getitem__(idx)
+        return image, int(label[0])
+
 def get_dataloaders(args):
     train_loader, val_loader, test_loader = None, None, None
     if args.data == 'cifar10':
@@ -45,9 +61,9 @@ def get_dataloaders(args):
         val_set = None
     elif args.data.endswith('mnist'):
         if args.data == 'octmnist':
-            dataclass = OCTMNIST
+            dataclass = WrapOCTMNIST
         elif args.data == 'tissuemnist':
-            dataclass = TissueMNIST
+            dataclass = WrapTissueMNIST
         else:
             raise NotImplementedError
 
