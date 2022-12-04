@@ -98,5 +98,7 @@ if args.data == 'cifar10':
     args.num_classes = 10
 elif args.data == 'cifar100':
     args.num_classes = 100
-else:
-    args.num_classes = 1000
+elif args.data == 'octmnist':
+    args.num_classes = 4
+elif args.data == 'tissuemnist':
+    args.num_classes = 8
