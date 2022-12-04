@@ -182,7 +182,7 @@ def train(train_loader, model, criterion, optimizer, epoch):
                     batch_time=batch_time, data_time=data_time,
                     loss=losses, top1=top1[-1]))
 
-    return losses.avg, top1[-1].avg, top5[-1].avg, running_lr
+    return losses.avg, top1[-1].avg, running_lr
 
 def validate(val_loader, model, criterion):
     batch_time = AverageMeter()
@@ -228,24 +228,23 @@ def validate(val_loader, model, criterion):
                       'Time {batch_time.avg:.3f}\t'
                       'Data {data_time.avg:.3f}\t'
                       'Loss {loss.val:.4f}\t'
-                      'Acc@1 {top1.val:.4f}\t'
-                      'Acc@5 {top5.val:.4f}'.format(
+                      'Acc@1 {top1.val:.4f}'.format(
                         i + 1, len(val_loader),
                         batch_time=batch_time, data_time=data_time,
-                        loss=losses, top1=top1[-1], top5=top5[-1]))
+                        loss=losses, top1=top1[-1]))
     
     result_file =  os.path.join(args.save, 'AnytimeResults.txt')
     
     fd = open(result_file, 'w+')
     fd.write('AnytimeResults' + '\n')
     for j in range(args.num_exits):
-        test_str = (' @{ext}** flops {flops:.2f}M prec@1 {top1.avg:.3f} prec@5 {top5.avg:.3f}'.format(ext = j+1, flops=n_flops[j]/1e6, top1=top1[j], top5=top5[j]))
+        test_str = (' @{ext}** flops {flops:.2f}M prec@1 {top1.avg:.3f}'.format(ext = j+1, flops=n_flops[j]/1e6, top1=top1[j]))
         print(test_str)
         fd = open(result_file, 'a+')
         fd.write(test_str + '\n')
     fd.close()  
     torch.save([e.avg for e in top1], os.path.join(args.save, 'acc.pth'))
-    return losses.avg, top1[-1].avg, top5[-1].avg
+    return losses.avg, top1[-1].avg
 
 def save_checkpoint(state, args, is_best, filename, result):
     print(args)
